@@ -3,9 +3,12 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import {
-  loadWebState,
-  saveWebState,
-  getVaultDir,
+  loadWebStateAsync,
+  saveWebStateAsync,
+  saveVaultBlobAsync,
+  deleteVaultBlobAsync,
+  getDatabaseInfo,
+  generatePdfBufferServer,
   sha256Hex,
   encryptVaultBuffer,
   formatIdrServer,
@@ -150,14 +153,16 @@ export async function GET(
 ) {
   const { slug } = await context.params;
   const route = slug.join("/");
-  const state = loadWebState();
+  const state = await loadWebStateAsync();
 
   if (route === "health") {
+    const dbInfo = getDatabaseInfo();
     return NextResponse.json({
       status: "ok",
       app_name: "TechVal AI (Next.js Full-Stack Web Engine)",
       app_version: "1.0.0",
       runtime: "npm-native-nextjs",
+      database: dbInfo,
       table_count: 26,
     });
   }
@@ -270,25 +275,18 @@ export async function GET(
   if (slug[0] === "reports" && slug[1] === "download" && slug[2]) {
     const repId = slug[2];
     const rep = state.reports.find((r: any) => r.id === repId);
+    const tech = state.technologies.find(
+      (t: any) => t.id === rep?.technology_id
+    );
     const langCode = rep?.language === "id" ? "ID" : "EN";
     const statusLabel = rep?.is_draft === false ? "Approved" : "Draft";
-    const samplePdfPath = path.resolve(
-      process.cwd(),
-      "..",
-      "docs",
-      "sample_reports",
-      `TechVal_Sample_Report_${langCode}_${statusLabel}.pdf`
-    );
-    if (fs.existsSync(samplePdfPath)) {
-      const pdfBytes = fs.readFileSync(samplePdfPath);
-      return new NextResponse(pdfBytes, {
-        headers: {
-          "Content-Type": "application/pdf",
-          "Content-Disposition": `attachment; filename="TechVal_Report_${langCode}_${statusLabel}.pdf"`,
-        },
-      });
-    }
-    return NextResponse.json({ detail: "Report PDF file not found" }, { status: 404 });
+    const pdfBytes = generatePdfBufferServer(rep, tech);
+    return new NextResponse(new Uint8Array(pdfBytes), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="TechVal_Report_${langCode}_${statusLabel}.pdf"`,
+      },
+    });
   }
 
   if (route === "references") {
@@ -391,7 +389,7 @@ export async function POST(
 ) {
   const { slug } = await context.params;
   const route = slug.join("/");
-  const state = loadWebState();
+  const state = await loadWebStateAsync();
   const now = new Date().toISOString();
 
   if (route === "auth/login") {
@@ -469,7 +467,7 @@ export async function POST(
       newId,
       `Created technology ${newTech.code}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(newTech, { status: 201 });
   }
 
@@ -493,8 +491,7 @@ export async function POST(
     const encBytes = encryptVaultBuffer(bytes);
     const docId = `doc-${crypto.randomUUID().slice(0, 8)}`;
     const opaqueName = `${docId}.enc`;
-    const vaultFile = path.join(getVaultDir(), opaqueName);
-    fs.writeFileSync(vaultFile, encBytes);
+    await saveVaultBlobAsync(opaqueName, docId, hash, encBytes);
 
     const textPreview =
       ext === ".txt" || ext === ".md"
@@ -547,7 +544,7 @@ export async function POST(
       docId,
       `Encrypted & vaulted ${file.name} (SHA-256: ${hash.slice(0, 12)})`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(newDoc, { status: 201 });
   }
 
@@ -703,7 +700,7 @@ export async function POST(
       newRun.id,
       `Completed 8-agent workflow via ${provider}/${actualModelReturned}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(newRun, { status: 201 });
   }
 
@@ -847,7 +844,7 @@ export async function POST(
       newRev.id,
       `Created Revision #${newRev.revision_number}: ${body.change_reason}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(newRev, { status: 201 });
   }
 
@@ -899,7 +896,7 @@ export async function POST(
       scen?.id || "val-dcf-base",
       `${body.change_reason} -> ${formatIdrServer(calc.npv_idr)}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(scen || {}, { status: 201 });
   }
 
@@ -932,7 +929,7 @@ export async function POST(
       newRevRecord.id,
       `Expert Review (${newRevRecord.status.toUpperCase()}) bound to revision ${revId}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(newRevRecord, { status: 201 });
   }
 
@@ -975,7 +972,7 @@ export async function POST(
       snap.id,
       `Generated ${lang.toUpperCase()} PDF report (${snap.watermark_text})`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json(snap, { status: 201 });
   }
 
@@ -999,7 +996,7 @@ export async function DELETE(
   context: { params: Promise<{ slug: string[] }> }
 ) {
   const { slug } = await context.params;
-  const state = loadWebState();
+  const state = await loadWebStateAsync();
   const now = new Date().toISOString();
 
   if (slug[0] === "documents" && slug[1]) {
@@ -1011,8 +1008,7 @@ export async function DELETE(
     const secs = state.documentSections[docId]?.length || 0;
     delete state.documentSections[docId];
 
-    const vaultFile = path.join(getVaultDir(), doc.opaque_storage_id);
-    if (fs.existsSync(vaultFile)) fs.unlinkSync(vaultFile);
+    await deleteVaultBlobAsync(doc.opaque_storage_id);
 
     const tech = state.technologies.find((t: any) => t.id === doc.technology_id);
     if (tech && tech.active_document_count > 0) tech.active_document_count -= 1;
@@ -1029,7 +1025,7 @@ export async function DELETE(
       docId,
       `Cascade purged ${doc.original_filename}`
     );
-    saveWebState(state);
+    await saveWebStateAsync(state);
     return NextResponse.json({
       deleted: true,
       document_id: docId,
