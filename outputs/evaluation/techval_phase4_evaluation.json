@@ -1,0 +1,167 @@
+{
+  "is_synthetic_demo": true,
+  "synthetic_warning_banner": "SYNTHETIC DEMONSTRATION DATASET \u2014 ISOLATED FOR PIPELINE & METRIC VERIFICATION ONLY. NO EMPIRICAL ACCURACY CLAIMS ARE MADE FROM THIS FIXTURE.",
+  "matching_and_missing_pair_policy": "Extraction Matching Policy: True Positive requires exact tuple match on (item_id, indicator_code, document_id, location_ref) with verified substring quotation. Missing-Pair Policy: Pairwise complete-case evaluation (pairs where either rater is missing or N/A are counted in `missing_pair_count` and never imputed; undefined metrics are marked 'unavailable').",
+  "conditions_summary": {
+    "human_expert": {
+      "condition": "human_expert",
+      "extraction": {
+        "true_positives": 9,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "agreement_qwk": {
+        "qwk": 1.0,
+        "valid_pair_count": 30,
+        "missing_pair_count": 0
+      },
+      "agreement_icc": {
+        "icc_2_1_absolute_agreement": 1.0,
+        "icc_3_1_consistency": 1.0,
+        "specification": "Shrout & Fleiss (1979): ICC(2,1) two-way random absolute agreement; ICC(3,1) two-way mixed consistency",
+        "valid_pair_count": 30
+      },
+      "score_error": {
+        "mae": 0.0,
+        "rmse": 0.0,
+        "smape_percent": 0.0,
+        "valid_pair_count": 30
+      },
+      "valuation_error_idr": {
+        "mae": 0.0,
+        "rmse": 0.0,
+        "smape_percent": 0.0,
+        "valid_pair_count": 3
+      },
+      "citation_traceability": {
+        "total_emitted_citations": 9,
+        "resolved_citations": 9,
+        "citation_resolution_precision": 1.0,
+        "unsupported_claim_rejection_rate": 0.0
+      }
+    },
+    "llm_only": {
+      "condition": "llm_only",
+      "extraction": {
+        "true_positives": 4,
+        "false_positives": 0,
+        "false_negatives": 5,
+        "precision": 1.0,
+        "recall": 0.444444,
+        "f1": 0.615384
+      },
+      "agreement_qwk": {
+        "qwk": 0.178499,
+        "valid_pair_count": 30,
+        "missing_pair_count": 0
+      },
+      "agreement_icc": {
+        "icc_2_1_absolute_agreement": 0.183525,
+        "icc_3_1_consistency": 0.17868,
+        "specification": "Shrout & Fleiss (1979): ICC(2,1) two-way random absolute agreement; ICC(3,1) two-way mixed consistency",
+        "valid_pair_count": 30
+      },
+      "score_error": {
+        "mae": 0.9,
+        "rmse": 0.948683,
+        "smape_percent": 26.1799,
+        "valid_pair_count": 30
+      },
+      "valuation_error_idr": {
+        "mae": 285850000.0,
+        "rmse": 293276889.929409,
+        "smape_percent": 28.778,
+        "valid_pair_count": 3
+      },
+      "citation_traceability": {
+        "total_emitted_citations": 6,
+        "resolved_citations": 4,
+        "citation_resolution_precision": 0.666667,
+        "unsupported_claim_rejection_rate": 0.0
+      }
+    },
+    "multi_agent": {
+      "condition": "multi_agent",
+      "extraction": {
+        "true_positives": 8,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "precision": 1.0,
+        "recall": 0.888889,
+        "f1": 0.941177
+      },
+      "agreement_qwk": {
+        "qwk": 0.807692,
+        "valid_pair_count": 30,
+        "missing_pair_count": 0
+      },
+      "agreement_icc": {
+        "icc_2_1_absolute_agreement": 0.812903,
+        "icc_3_1_consistency": 0.812903,
+        "specification": "Shrout & Fleiss (1979): ICC(2,1) two-way random absolute agreement; ICC(3,1) two-way mixed consistency",
+        "valid_pair_count": 30
+      },
+      "score_error": {
+        "mae": 0.133333,
+        "rmse": 0.365148,
+        "smape_percent": 4.1905,
+        "valid_pair_count": 30
+      },
+      "valuation_error_idr": {
+        "mae": 30850000.0,
+        "rmse": 30873410.890279,
+        "smape_percent": 3.4412,
+        "valid_pair_count": 3
+      },
+      "citation_traceability": {
+        "total_emitted_citations": 9,
+        "resolved_citations": 8,
+        "citation_resolution_precision": 0.888889,
+        "unsupported_claim_rejection_rate": 0.0
+      }
+    },
+    "multi_agent_validated": {
+      "condition": "multi_agent_validated",
+      "extraction": {
+        "true_positives": 9,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "agreement_qwk": {
+        "qwk": 1.0,
+        "valid_pair_count": 30,
+        "missing_pair_count": 0
+      },
+      "agreement_icc": {
+        "icc_2_1_absolute_agreement": 1.0,
+        "icc_3_1_consistency": 1.0,
+        "specification": "Shrout & Fleiss (1979): ICC(2,1) two-way random absolute agreement; ICC(3,1) two-way mixed consistency",
+        "valid_pair_count": 30
+      },
+      "score_error": {
+        "mae": 0.0,
+        "rmse": 0.0,
+        "smape_percent": 0.0,
+        "valid_pair_count": 30
+      },
+      "valuation_error_idr": {
+        "mae": 3333333.333333,
+        "rmse": 4082482.904639,
+        "smape_percent": 0.3953,
+        "valid_pair_count": 3
+      },
+      "citation_traceability": {
+        "total_emitted_citations": 10,
+        "resolved_citations": 9,
+        "citation_resolution_precision": 0.9,
+        "unsupported_claim_rejection_rate": 1.0
+      }
+    }
+  }
+}

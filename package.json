@@ -1,0 +1,13 @@
+{
+  "name": "techval-ai-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TechVal AI — Full-Stack Next.js Web Platform for Scientific Technology Assessment & WIPO IDR Valuation",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "lint": "npm --prefix frontend run lint",
+    "setup": "npm --prefix frontend install && npm --prefix frontend run build"
+  }
+}
