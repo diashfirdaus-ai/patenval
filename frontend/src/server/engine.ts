@@ -8,7 +8,12 @@ function resolveRuntimeDir(): string {
   if (process.env.TECHVAL_DATA_DIR) {
     return path.resolve(process.env.TECHVAL_DATA_DIR);
   }
-  const localCandidate = path.resolve(process.cwd(), "..", ".runtime");
+  const cwd = process.cwd();
+  const baseDir =
+    path.basename(cwd).toLowerCase() === "frontend"
+      ? path.resolve(cwd, "..")
+      : cwd;
+  const localCandidate = path.join(baseDir, ".runtime");
   try {
     fs.mkdirSync(localCandidate, { recursive: true });
     return localCandidate;
