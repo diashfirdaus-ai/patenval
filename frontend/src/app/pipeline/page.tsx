@@ -140,11 +140,11 @@ export default function PipelineMonitorPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">{t.nav.pipeline}</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-3xl font-bold text-slate-900">{t.nav.pipeline}</h1>
+        <p className="mt-1 text-base text-slate-600">
           {lang === "id"
-            ? "Orkestrasi 8-agen LangGraph dengan persetujuan eksplisit terikat SHA-256 dan larangan fallback diam-diam (zero silent fallback)."
-            : "LangGraph 8-agent orchestration with SHA-256-bound explicit consent and zero silent fallback to fixture data."}
+            ? "AI akan membaca dokumen Anda dan menyiapkan penilaian. Cukup centang persetujuan lalu tekan tombol mulai."
+            : "AI will read your documents and prepare the assessment. Just tick the consent box and press start."}
         </p>
       </div>
 
@@ -157,12 +157,22 @@ export default function PipelineMonitorPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Consent & Run Trigger */}
         <Card className="lg:col-span-1 space-y-4">
-          <div className="flex items-center gap-2 font-bold text-slate-900">
-            <ShieldCheck className="h-4 w-4 text-blue-700" />
-            <span>Explicit Consent & Provider Binding</span>
+          <div className="flex items-center gap-2 text-lg font-semibold text-slate-900">
+            <ShieldCheck className="h-5 w-5 text-blue-700" />
+            <span>{lang === "id" ? "Mulai analisis" : "Start analysis"}</span>
           </div>
+          <p className="text-sm text-slate-600">
+            {lang === "id"
+              ? `${documents.length} dokumen siap dianalisis.`
+              : `${documents.length} document(s) ready to analyze.`}
+          </p>
 
-          <form onSubmit={handleStartPipeline} className="space-y-3 text-xs">
+          <form onSubmit={handleStartPipeline} className="space-y-4 text-sm">
+            <details className="rounded-xl border border-slate-200 bg-slate-50">
+              <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-slate-800">
+                {lang === "id" ? "Pengaturan lanjutan ▾" : "Advanced settings ▾"}
+              </summary>
+              <div className="space-y-3 border-t border-slate-200 p-4">
             <div>
               <label className="block font-semibold text-slate-700">
                 Execution Provider
@@ -222,31 +232,16 @@ export default function PipelineMonitorPage() {
               </div>
             )}
 
-            <div className="rounded border border-slate-200 bg-slate-50 p-2.5 space-y-1">
+            <div className="rounded-lg border border-slate-200 bg-white p-2.5 space-y-1">
               <div className="font-semibold text-slate-800">
-                Bound Document SHA-256 Hashes ({documents.length}):
+                Document SHA-256 ({documents.length}):
               </div>
               {documents.map((d) => (
-                <div key={d.id} className="truncate font-mono text-[10px] text-slate-600">
+                <div key={d.id} className="truncate font-mono text-[11px] text-slate-600">
                   • {d.original_filename}: {d.sha256_hash.slice(0, 20)}...
                 </div>
               ))}
             </div>
-
-            <label className="flex items-start gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={consentChecked}
-                onChange={(e) => setConsentChecked(e.target.checked)}
-                className="mt-0.5"
-              />
-              <span className="text-slate-700">
-                I grant explicit consent to process the exact SHA-256 document hashes
-                above using <strong>{provider}</strong> ({modelName}). If the provider is
-                unreachable, the run must fail explicitly without falling back to fixture
-                data.
-              </span>
-            </label>
 
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -255,17 +250,44 @@ export default function PipelineMonitorPage() {
                 onChange={(e) => setSyncExecution(e.target.checked)}
               />
               <span className="text-slate-700">
-                Execute synchronously (immediate completion)
+                {lang === "id" ? "Tunggu sampai selesai" : "Wait until finished"}
+              </span>
+            </label>
+              </div>
+            </details>
+
+            <label className="flex items-start gap-3 cursor-pointer rounded-xl border border-slate-200 p-4">
+              <input
+                type="checkbox"
+                checked={consentChecked}
+                onChange={(e) => setConsentChecked(e.target.checked)}
+                className="mt-1 h-4 w-4"
+              />
+              <span className="text-slate-700">
+                {lang === "id"
+                  ? "Saya setuju dokumen di atas diproses oleh AI. Jika layanan AI tidak tersedia, analisis akan berhenti dan tidak memakai data contoh."
+                  : "I agree for the documents above to be processed by AI. If the AI service is unavailable, the analysis will stop instead of using sample data."}
               </span>
             </label>
 
+            {documents.length === 0 && (
+              <p className="text-sm text-amber-700">
+                {lang === "id"
+                  ? "Unggah dokumen terlebih dahulu di menu Unggah Dokumen."
+                  : "Please upload a document first in Upload Documents."}
+              </p>
+            )}
+
             <Button
               type="submit"
+              size="lg"
               disabled={!consentChecked || running || documents.length === 0}
               className="w-full"
             >
-              <Play className="h-3.5 w-3.5" />
-              {running ? "Executing 8-Agent Workflow..." : "Record Consent & Run Pipeline"}
+              <Play className="h-4 w-4" />
+              {running
+                ? lang === "id" ? "Sedang menganalisis..." : "Analyzing..."
+                : lang === "id" ? "Mulai Analisis" : "Start Analysis"}
             </Button>
           </form>
         </Card>
@@ -341,19 +363,35 @@ export default function PipelineMonitorPage() {
               )}
 
               {selectedRun.partial_results_json?.meta_ai_live_verification && (
-                <div className="rounded border border-emerald-300 bg-emerald-50 p-3 text-xs text-emerald-950 space-y-1.5">
+                <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-xs text-emerald-950 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2 font-bold">
-                    <span>
-                      Live dev.meta.ai Response ({selectedRun.partial_results_json.meta_ai_live_verification.model})
+                    <span className="text-sm text-emerald-950">
+                      Meta AI Multi-Model Verification ({selectedRun.partial_results_json.meta_ai_live_verification.model})
                     </span>
                     <span className="font-mono text-[11px] text-emerald-800">
                       ID: {selectedRun.partial_results_json.meta_ai_live_verification.completion_id} • Tokens:{" "}
-                      {selectedRun.partial_results_json.meta_ai_live_verification.usage?.total_tokens ?? "N/A"}
+                      {selectedRun.partial_results_json.meta_ai_live_verification.usage?.total_tokens ?? "N/A"} • Docs:{" "}
+                      {selectedRun.partial_results_json.meta_ai_live_verification.documents_analyzed ?? documents.length}
                     </span>
                   </div>
-                  <p className="text-slate-800 leading-relaxed">
-                    {selectedRun.partial_results_json.meta_ai_live_verification.content}
-                  </p>
+                  <div className="rounded-lg border border-emerald-200 bg-white/80 p-3 space-y-1">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-blue-800">
+                      Stage 1 — {selectedRun.partial_results_json.meta_ai_live_verification.stage1_model || "muse-spark-1.3"} (Evidence & Locator Extraction)
+                    </div>
+                    <p className="text-slate-800 leading-relaxed">
+                      {selectedRun.partial_results_json.meta_ai_live_verification.content}
+                    </p>
+                  </div>
+                  {selectedRun.partial_results_json.meta_ai_live_verification.stage2_synthesis && (
+                    <div className="rounded-lg border border-indigo-200 bg-white/80 p-3 space-y-1">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-800">
+                        Stage 2 — {selectedRun.partial_results_json.meta_ai_live_verification.stage2_model || "muse-wonder-1.0"} (NASA TRL 1–9 & WIPO Commercialization Synthesis)
+                      </div>
+                      <p className="text-slate-800 leading-relaxed">
+                        {selectedRun.partial_results_json.meta_ai_live_verification.stage2_synthesis}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 

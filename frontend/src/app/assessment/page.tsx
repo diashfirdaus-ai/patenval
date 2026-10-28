@@ -103,16 +103,18 @@ export default function TechAssessmentPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">{t.nav.assessment}</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-bold text-slate-900">{t.nav.assessment}</h1>
+          <p className="mt-1 text-base text-slate-600">
             {lang === "id"
-              ? "Dimensi 1: Penilaian Teknologi (Normalisasi (s-1)/4), Skala Asli NASA TRL 1–9, dan Penampil Bukti Terikat Lokasi."
-              : "Dimension 1: Technology Assessment ((s-1)/4 normalization), Native NASA TRL 1–9 scale, and Source-Resolved Evidence Viewer."}
+              ? "Lihat skor kesiapan teknologi (NASA TRL 1–9), indikator teknis, dan kutipan bukti langsung dari dokumen Anda."
+              : "Review your technology readiness level (NASA TRL 1–9), technical indicators, and direct evidence quotes from your documents."}
           </p>
         </div>
         {revision && (
           <div className="flex items-center gap-2">
-            <Badge variant="info">Immutable Revision #{revision.revision_number}</Badge>
+            <Badge variant="info">
+              {lang === "id" ? `Revisi #${revision.revision_number}` : `Revision #${revision.revision_number}`}
+            </Badge>
             {revision.is_provisional && (
               <Badge variant="warning">{t.fourOutputs.provisionalBadge}</Badge>
             )}

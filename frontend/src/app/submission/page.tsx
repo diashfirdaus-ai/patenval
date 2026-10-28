@@ -106,15 +106,43 @@ export default function SubmissionVaultPage() {
     }
   };
 
+  const handleLoadSample = async () => {
+    if (!selectedTechId) return;
+    setUploading(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const sample = await apiClient.loadSampleDocument(selectedTechId);
+      setMessage(
+        lang === "id"
+          ? `Dokumen contoh "${sample.original_filename}" berhasil dimuat dan siap dianalisis dengan Meta AI.`
+          : `Sample patent dossier "${sample.original_filename}" loaded and ready for Meta AI analysis.`
+      );
+      await loadDocuments();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">{t.nav.submission}</h1>
-        <p className="text-sm text-slate-600">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">{t.nav.submission}</h1>
+          <p className="mt-1 text-base text-slate-600">
+            {lang === "id"
+              ? "Unggah dokumen paten atau teknis Anda, atau muat contoh dokumen paten dengan 1 klik untuk menguji analisis Meta AI."
+              : "Upload your patent or technical files, or load a sample patent dossier in 1 click to test Meta AI analysis."}
+          </p>
+        </div>
+        <Button variant="secondary" onClick={handleLoadSample} disabled={uploading}>
+          <FileText className="h-4 w-4" />
           {lang === "id"
-            ? "Brankas dokumen terenkripsi (Fernet AES-128-CBC + HMAC-SHA256) di luar web root dengan verifikasi magic-byte dan penghapusan kaskade penuh."
-            : "Encrypted document vault outside web root (.runtime/vault) with magic-byte verification, OCR detection, and complete cascade deletion."}
-        </p>
+            ? "Muat Contoh Dokumen Paten (1 Klik)"
+            : "Load Sample Patent Dossier (1-Click)"}
+        </Button>
       </div>
 
       {error && (

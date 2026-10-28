@@ -165,6 +165,11 @@ export const apiClient = {
       body: fd,
     });
   },
+  loadSampleDocument: (techId: string) =>
+    apiFetch<DocumentItem>("/documents/load-sample", {
+      method: "POST",
+      body: JSON.stringify({ technology_id: techId }),
+    }),
   deleteDocument: (docId: string, reason: string) =>
     apiFetch<Record<string, any>>(
       `/documents/${docId}?reason=${encodeURIComponent(reason)}`,

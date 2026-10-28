@@ -363,19 +363,35 @@ export default function PipelineMonitorPage() {
               )}
 
               {selectedRun.partial_results_json?.meta_ai_live_verification && (
-                <div className="rounded border border-emerald-300 bg-emerald-50 p-3 text-xs text-emerald-950 space-y-1.5">
+                <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-xs text-emerald-950 space-y-2.5">
                   <div className="flex flex-wrap items-center justify-between gap-2 font-bold">
-                    <span>
-                      Live dev.meta.ai Response ({selectedRun.partial_results_json.meta_ai_live_verification.model})
+                    <span className="text-sm text-emerald-950">
+                      Meta AI Multi-Model Verification ({selectedRun.partial_results_json.meta_ai_live_verification.model})
                     </span>
                     <span className="font-mono text-[11px] text-emerald-800">
                       ID: {selectedRun.partial_results_json.meta_ai_live_verification.completion_id} • Tokens:{" "}
-                      {selectedRun.partial_results_json.meta_ai_live_verification.usage?.total_tokens ?? "N/A"}
+                      {selectedRun.partial_results_json.meta_ai_live_verification.usage?.total_tokens ?? "N/A"} • Docs:{" "}
+                      {selectedRun.partial_results_json.meta_ai_live_verification.documents_analyzed ?? documents.length}
                     </span>
                   </div>
-                  <p className="text-slate-800 leading-relaxed">
-                    {selectedRun.partial_results_json.meta_ai_live_verification.content}
-                  </p>
+                  <div className="rounded-lg border border-emerald-200 bg-white/80 p-3 space-y-1">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-blue-800">
+                      Stage 1 — {selectedRun.partial_results_json.meta_ai_live_verification.stage1_model || "muse-spark-1.3"} (Evidence & Locator Extraction)
+                    </div>
+                    <p className="text-slate-800 leading-relaxed">
+                      {selectedRun.partial_results_json.meta_ai_live_verification.content}
+                    </p>
+                  </div>
+                  {selectedRun.partial_results_json.meta_ai_live_verification.stage2_synthesis && (
+                    <div className="rounded-lg border border-indigo-200 bg-white/80 p-3 space-y-1">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-800">
+                        Stage 2 — {selectedRun.partial_results_json.meta_ai_live_verification.stage2_model || "muse-wonder-1.0"} (NASA TRL 1–9 & WIPO Commercialization Synthesis)
+                      </div>
+                      <p className="text-slate-800 leading-relaxed">
+                        {selectedRun.partial_results_json.meta_ai_live_verification.stage2_synthesis}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
