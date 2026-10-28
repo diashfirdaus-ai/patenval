@@ -202,8 +202,11 @@ export default function PipelineMonitorPage() {
                   onChange={(e) => setModelName(e.target.value)}
                   className="mt-1 w-full rounded border border-slate-300 px-2.5 py-1.5 font-mono"
                 >
-                  <option value="muse-spark-1.3">muse-spark-1.3 (Meta Muse Spark 1.3 — Recommended)</option>
-                  <option value="muse-wonder-1.0">muse-wonder-1.0 (Meta Muse Wonder 1.0)</option>
+                  <option value="muse-spark-1.3">muse-spark-1.3 (Meta Muse Spark 1.3 — Multi-Agent Orchestrator)</option>
+                  <option value="muse-wonder-1.0">muse-wonder-1.0 (Meta Muse Wonder 1.0 — Scientific Reasoning)</option>
+                  <option value="muse-code">muse-code (Meta Muse Code — Technical & Patent Claim Parser)</option>
+                  <option value="muse-image">muse-image (Meta Muse Image — Diagram & Visual Inspector)</option>
+                  <option value="sam-3.1">sam-3.1 (Meta SAM 3.1 — Document & Figure Segmentation)</option>
                   <option value="muse-spark-1.3-contributor">muse-spark-1.3-contributor</option>
                   <option value="muse-spark-1.2">muse-spark-1.2</option>
                   <option value="muse-spark-1.1">muse-spark-1.1</option>

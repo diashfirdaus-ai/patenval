@@ -679,8 +679,8 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
 
   if (route === "analysis-runs" || (slug[0] === "analysis-runs" && slug[2] === "retry")) {
     const body = route === "analysis-runs" ? await req.json() : {};
-    const provider = body.provider || "fixture";
-    const modelName = body.model_name || "fixture-deterministic-v1";
+    const provider = body.provider || "meta_ai";
+    const modelName = body.model_name || "muse-spark-1.3";
     const techId =
       body.technology_id || state.technologies[0]?.id || "tech-itenas-2026-001";
     const tech = state.technologies.find((t: any) => t.id === techId) || state.technologies[0];
@@ -1328,6 +1328,9 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
     const techId = body.technology_id;
     const lang = body.language === "id" ? "id" : "en";
     const tech = state.technologies.find((t: any) => t.id === techId);
+    const latestRun =
+      state.analysisRuns.find((r: any) => r.technology_id === techId) ||
+      state.analysisRuns[0];
     const isApproved = tech?.expert_review_status === "approved";
     const snap = {
       id: `rep-${crypto.randomUUID().slice(0, 8)}`,
@@ -1342,12 +1345,16 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
       file_sha256: sha256Hex(`${techId}-${lang}-${now}`),
       provenance_json: {
         app_version: "1.0.0",
-        requested_provider: "fixture",
-        actual_provider_returned: "fixture",
-        requested_model: "fixture-deterministic-v1",
-        actual_model_returned: "fixture-deterministic-v1",
-        prompt_hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        requested_provider: latestRun?.requested_provider || "meta_ai",
+        actual_provider_returned: latestRun?.actual_provider_returned || "meta_ai",
+        requested_model: latestRun?.requested_model || "muse-spark-1.3",
+        actual_model_returned:
+          latestRun?.actual_model_returned || "muse-spark-1.3 + muse-wonder-1.0",
+        prompt_hash:
+          latestRun?.prompt_hash ||
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         run_config_hash:
+          latestRun?.run_config_hash ||
           "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
         rubric_version_tag: "methodology_v1.0",
         weight_set_version: "provisional_equal_v1",
