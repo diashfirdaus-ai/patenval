@@ -28,6 +28,9 @@ import {
   UserCheck,
   Menu,
   X,
+  Building2,
+  Play,
+  ArrowUpRight,
 } from "lucide-react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -88,7 +91,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     {
       label: t.nav.groupMain,
       items: [
-        { href: "/", label: t.nav.portfolio, icon: LayoutDashboard },
+        { href: "/", label: t.nav.home, icon: Building2 },
+        { href: "/demo", label: t.nav.portfolio, icon: LayoutDashboard },
         { href: "/submission", label: t.nav.submission, icon: FileUp },
         { href: "/pipeline", label: t.nav.pipeline, icon: Cpu },
       ],
@@ -113,6 +117,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   ];
 
   const activeTech = technologies.find((x) => x.id === selectedTechId) || technologies[0];
+  const isLandingPage = pathname === "/";
+
+  if (isLandingPage) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-900">
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">

@@ -1,356 +1,456 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { useAppState } from "@/lib/i18n";
-import { apiClient } from "@/lib/api-client";
-import type { TechnologyItem } from "@/lib/api-types";
+import { InteractiveSandboxPreview } from "@/components/home/InteractiveSandboxPreview";
 import {
-  Card,
-  Badge,
-  Button,
-  FourOutputsGrid,
-  EmptyState,
-  Collapsible,
-} from "@/components/ui/primitives";
-import { PlusCircle, ArrowRight, FileUp, Cpu, FileText } from "lucide-react";
+  BackgroundAndArchitectureSection,
+  ImpactAndBenchmarkSection,
+} from "@/components/home/LandingSections";
+import {
+  Play,
+  ArrowRight,
+  Globe,
+  ShieldCheck,
+  Award,
+  Sparkles,
+  FileText,
+  Calculator,
+  Cpu,
+  CheckCircle2,
+  BookOpen,
+  Microscope,
+} from "lucide-react";
 
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200";
-const labelClass = "block text-sm font-medium text-slate-800";
-
-export default function PortfolioOverviewPage() {
-  const { lang, t, selectedTechId, setSelectedTechId } = useAppState();
+export default function CompanyProfileHomePage() {
+  const { lang, setLang } = useAppState();
   const id = lang === "id";
-  const [technologies, setTechnologies] = useState<TechnologyItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showCreateForm, setShowCreateForm] = useState<boolean>(false);
-  const [saving, setSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
-  const [newCode, setNewCode] = useState("ITENAS-PAT-2026-002");
-  const [newTitleEn, setNewTitleEn] = useState("");
-  const [newTitleId, setNewTitleId] = useState("");
-  const [newDomain, setNewDomain] = useState("Environmental & Chemical Engineering");
-  const [newDescEn, setNewDescEn] = useState("");
-  const [newClaimedTrl, setNewClaimedTrl] = useState<number>(6);
-  const [newPatentStatus, setNewPatentStatus] = useState("patent_pending");
+  const navLinks = [
+    { href: "#latar-belakang", label: id ? "Latar Belakang" : "Background" },
+    { href: "#arsitektur", label: id ? "Inovasi 4-Output" : "4-Output Architecture" },
+    { href: "#sandbox-demo", label: id ? "Simulasi Interaktif" : "Live Simulator" },
+    { href: "#validasi", label: id ? "Bukti Ilmiah" : "Scientific Proof" },
+    { href: "#dampak", label: id ? "Dampak Nasional" : "Ecosystem Impact" },
+  ];
 
-  const loadPortfolio = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const items = await apiClient.listTechnologies();
-      setTechnologies(items);
-      if (items.length > 0 && !selectedTechId) {
-        setSelectedTechId(items[0].id);
-      }
-    } catch (e: any) {
-      setError(e.message || "Failed to load portfolio");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadPortfolio();
-  }, []);
-
-  const handleCreateTech = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-    setSaving(true);
-    try {
-      const created = await apiClient.createTechnology({
-        code: newCode,
-        title_en: newTitleEn,
-        title_id: newTitleId || newTitleEn,
-        domain: newDomain,
-        inventor_organization: "ITENAS Bandung",
-        description_en: newDescEn,
-        description_id: newDescEn,
-        claimed_trl: Number(newClaimedTrl),
-        patent_status: newPatentStatus,
-        is_synthetic_demo: false,
-      });
-      setShowCreateForm(false);
-      setSelectedTechId(created.id);
-      setSuccess(
-        id
-          ? "Teknologi berhasil ditambahkan. Langkah berikutnya: unggah dokumen."
-          : "Technology added. Next step: upload your documents."
-      );
-      setNewTitleEn("");
-      setNewTitleId("");
-      setNewDescEn("");
-      await loadPortfolio();
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const activeTech =
-    technologies.find((x) => x.id === selectedTechId) || technologies[0] || null;
-  const titleOf = (tech: TechnologyItem) =>
-    id && tech.title_id ? tech.title_id : tech.title_en;
-
-  const steps = [
+  const heroStats = [
     {
-      href: "/submission",
-      icon: FileUp,
-      title: id ? "1. Unggah dokumen" : "1. Upload documents",
-      desc: id ? "Tambahkan dokumen teknis atau paten." : "Add your technical or patent files.",
+      value: "4 Output",
+      sub: id ? "Terpisah Tanpa Konversi Skor-ke-Uang" : "Strictly Isolated (Zero Score-to-Cash)",
+      accent: "text-blue-400",
     },
     {
-      href: "/pipeline",
-      icon: Cpu,
-      title: id ? "2. Jalankan analisis" : "2. Run the analysis",
-      desc: id ? "AI membaca dan menilai dokumen Anda." : "AI reads and scores your documents.",
+      value: "QWK 1.00",
+      sub: id ? "Kesepakatan Pakar Tervalidasi (ICC 1.0)" : "Validated Expert Agreement (ICC 1.0)",
+      accent: "text-emerald-400",
     },
     {
-      href: "/reports",
-      icon: FileText,
-      title: id ? "3. Unduh laporan" : "3. Get your report",
-      desc: id ? "Simpan hasil sebagai laporan PDF." : "Save the results as a PDF report.",
+      value: "MAE Rp 0",
+      sub: id ? "Akurasi Mesin Finansial Deterministik WIPO" : "Deterministic WIPO IDR Engine Error",
+      accent: "text-amber-300",
+    },
+    {
+      value: "100%",
+      sub: id ? "Lacak Kutipan Dokumen (page/para/table)" : "Verbatim Source Locator Traceability",
+      accent: "text-indigo-300",
     },
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            {id ? "Selamat datang" : "Welcome"}
-          </h1>
-          <p className="mt-1 text-base text-slate-600">
-            {id
-              ? "Lihat ringkasan penilaian teknologi Anda dalam sekali pandang."
-              : "See a quick summary of your technology assessment."}
-          </p>
-        </div>
-        <Button size="lg" onClick={() => setShowCreateForm(!showCreateForm)}>
-          <PlusCircle className="h-5 w-5" />
-          {id ? "Tambah Teknologi" : "Add Technology"}
-        </Button>
-      </div>
-
-      {error && (
-        <div role="alert" className="rounded-xl border border-rose-300 bg-rose-50 p-4 text-sm text-rose-800">
-          {t.common.errorPrefix} {error}
-        </div>
-      )}
-      {success && (
-        <div role="status" className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-800">
-          {success}
-        </div>
-      )}
-
-      {showCreateForm && (
-        <Card>
-          <h2 className="mb-1 text-xl font-semibold text-slate-900">
-            {id ? "Tambah teknologi baru" : "Add a new technology"}
-          </h2>
-          <p className="mb-5 text-sm text-slate-600">
-            {id ? "Isi informasi dasar saja. Anda bisa melengkapinya nanti." : "Just the basics. You can fill in the rest later."}
-          </p>
-          <form onSubmit={handleCreateTech} className="space-y-5">
-            <div>
-              <label className={labelClass} htmlFor="title-en">
-                {id ? "Nama teknologi" : "Technology name"}
-              </label>
-              <input
-                id="title-en"
-                required
-                value={newTitleEn}
-                onChange={(e) => setNewTitleEn(e.target.value)}
-                placeholder="e.g., Hybrid Photocatalytic Wastewater Reactor"
-                className={inputClass}
-              />
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
+      {/* Top Floating Navigation Bar */}
+      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3.5 sm:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-emerald-500 font-mono text-base font-black text-slate-950 shadow-md shadow-blue-500/20">
+              TV
             </div>
             <div>
-              <label className={labelClass} htmlFor="desc">
-                {id ? "Deskripsi singkat" : "Short description"}
-              </label>
-              <textarea
-                id="desc"
-                required
-                rows={3}
-                value={newDescEn}
-                onChange={(e) => setNewDescEn(e.target.value)}
-                placeholder={id ? "Apa yang dilakukan teknologi ini?" : "What does this technology do?"}
-                className={inputClass}
-              />
-            </div>
-            <Collapsible title={t.common.advanced}>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div>
-                  <label className={labelClass} htmlFor="code">{id ? "Kode teknologi" : "Technology code"}</label>
-                  <input id="code" required value={newCode} onChange={(e) => setNewCode(e.target.value)} className={inputClass} />
-                </div>
-                <div>
-                  <label className={labelClass} htmlFor="domain">{id ? "Bidang" : "Field"}</label>
-                  <input id="domain" required value={newDomain} onChange={(e) => setNewDomain(e.target.value)} className={inputClass} />
-                </div>
-                <div>
-                  <label className={labelClass} htmlFor="title-id">{id ? "Nama (Bahasa Indonesia)" : "Name (Bahasa Indonesia)"}</label>
-                  <input id="title-id" value={newTitleId} onChange={(e) => setNewTitleId(e.target.value)} placeholder={id ? "Opsional" : "Optional"} className={inputClass} />
-                </div>
-                <div>
-                  <label className={labelClass} htmlFor="trl">{id ? "Tingkat kesiapan (TRL 1–9)" : "Readiness level (TRL 1–9)"}</label>
-                  <input id="trl" type="number" min={1} max={9} value={newClaimedTrl} onChange={(e) => setNewClaimedTrl(Number(e.target.value))} className={inputClass} />
-                </div>
-                <div className="md:col-span-2">
-                  <label className={labelClass} htmlFor="patent">{id ? "Status paten" : "Patent status"}</label>
-                  <select id="patent" value={newPatentStatus} onChange={(e) => setNewPatentStatus(e.target.value)} className={inputClass}>
-                    <option value="patent_pending">{id ? "Dalam proses paten" : "Patent pending"}</option>
-                    <option value="granted">{id ? "Paten diberikan" : "Granted patent"}</option>
-                    <option value="invention_disclosure">{id ? "Belum didaftarkan" : "Not filed yet"}</option>
-                    <option value="non_patent_ip">{id ? "Know-how / Perangkat lunak" : "Know-how / Software"}</option>
-                  </select>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-extrabold tracking-tight text-white">
+                  TechVal AI
+                </span>
+                <span className="hidden rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-300 sm:inline-block">
+                  ITENAS • DJKI • WIPO
+                </span>
               </div>
-            </Collapsible>
-            <div className="flex flex-wrap justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
-                {t.common.cancel}
-              </Button>
-              <Button type="submit" disabled={saving}>
-                {saving ? (id ? "Menyimpan..." : "Saving...") : id ? "Simpan Teknologi" : "Save Technology"}
-              </Button>
+              <p className="text-[11px] text-slate-400">
+                {id
+                  ? "Platform Penilaian Sains & Valuasi Ekonomi KI"
+                  : "Scientific IP Assessment & WIPO Valuation"}
+              </p>
             </div>
-          </form>
-        </Card>
-      )}
+          </div>
 
-      {loading ? (
-        <div className="py-12 text-center text-base text-slate-500">{t.common.loading}</div>
-      ) : technologies.length === 0 ? (
-        <EmptyState
-          title={id ? "Belum ada teknologi" : "No technologies yet"}
-          description={
-            id
-              ? "Mulai dengan menambahkan teknologi pertama Anda."
-              : "Start by adding your first technology."
-          }
-          action={
-            <Button onClick={() => setShowCreateForm(true)}>
-              <PlusCircle className="h-5 w-5" />
-              {id ? "Tambah Teknologi" : "Add Technology"}
-            </Button>
-          }
-        />
-      ) : (
-        <>
-          {activeTech && (
-            <section className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="text-xl font-semibold text-slate-900">{titleOf(activeTech)}</h2>
-                <Link
-                  href="/assessment"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline"
+          <nav className="hidden items-center gap-6 text-xs font-semibold text-slate-300 lg:flex">
+            {navLinks.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="transition hover:text-emerald-400"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2.5">
+            {/* Language Switcher */}
+            <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900 p-0.5 text-xs">
+              <Globe className="ml-2 mr-1 h-3.5 w-3.5 text-slate-400" />
+              {(["id", "en"] as const).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLang(code)}
+                  className={`rounded-lg px-2 py-1 font-mono font-bold transition ${
+                    lang === code
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-400 hover:text-white"
+                  }`}
                 >
-                  {id ? "Lihat detail" : "View details"} <ArrowRight className="h-4 w-4" />
+                  {code.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            {/* Primary Demo CTA Button in Navbar */}
+            <Link
+              href="/demo"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-emerald-500 px-4 py-2 text-xs font-extrabold text-slate-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-400 sm:text-sm"
+            >
+              <Play className="h-3.5 w-3.5 fill-current transition-transform group-hover:scale-110" />
+              <span>{id ? "Coba Demo Sekarang" : "Launch Live Demo"}</span>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b border-slate-800/80 pt-10 pb-20 sm:pt-16 sm:pb-24">
+        <div className="bg-dark-grid pointer-events-none absolute inset-0 opacity-60" />
+        <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-[48rem] -translate-x-1/2 rounded-full bg-blue-600/15 blur-3xl" />
+        <div className="pointer-events-none absolute top-40 right-10 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+            {/* Left Column: Pitch & CTAs */}
+            <div className="space-y-6 lg:col-span-7">
+              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs font-mono font-semibold text-amber-300">
+                <Award className="h-4 w-4 text-amber-400" />
+                <span>
+                  {id
+                    ? "INOVASI RISET UNGGULAN — ITENAS BANDUNG • STANDAR WIPO & NASA ESTO"
+                    : "AWARD-GRADE NATIONAL IP INNOVATION — ITENAS BANDUNG • WIPO & NASA ESTO"}
+                </span>
+              </div>
+
+              <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-[3.35rem] lg:leading-[1.12]">
+                {id ? (
+                  <>
+                    Jembatan Ilmiah dari{" "}
+                    <span className="bg-gradient-to-r from-blue-400 via-emerald-300 to-teal-200 bg-clip-text text-transparent">
+                      Dokumen Paten
+                    </span>{" "}
+                    Menuju{" "}
+                    <span className="underline decoration-emerald-500/60 decoration-wavy underline-offset-8">
+                      Valuasi Rupiah
+                    </span>{" "}
+                    yang Terverifikasi.
+                  </>
+                ) : (
+                  <>
+                    The Scientific Bridge from{" "}
+                    <span className="bg-gradient-to-r from-blue-400 via-emerald-300 to-teal-200 bg-clip-text text-transparent">
+                      Patent Disclosures
+                    </span>{" "}
+                    to Auditable{" "}
+                    <span className="underline decoration-emerald-500/60 decoration-wavy underline-offset-8">
+                      WIPO Valuation
+                    </span>
+                    .
+                  </>
+                )}
+              </h1>
+
+              <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+                {id
+                  ? "Platform pertama di Indonesia yang memisahkan secara ketat Penilaian Teknis NASA TRL 1–9, Kesiapan Komersialisasi TKDN, dan Mesin Finansial Deterministik WIPO dalam Rupiah (IDR) dengan pelacakan bukti kutipan dokumen 100% bebas halusinasi."
+                  : "Indonesia's premier scientific technology assessment and IP valuation platform enforcing strict separation between native NASA TRL 1–9 maturity, market readiness, and deterministic WIPO financial models in IDR with 100% verbatim source provenance."}
+              </p>
+
+              {/* Prominent Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <Link
+                  href="/demo"
+                  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 px-7 py-4 text-base font-black text-slate-950 shadow-xl shadow-emerald-500/25 transition duration-200 hover:-translate-y-0.5 hover:shadow-emerald-500/40"
+                >
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75" />
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-slate-950" />
+                  </span>
+                  <span>
+                    {id
+                      ? "Coba Demo Langsung (Tanpa Login)"
+                      : "Try Interactive Demo Now (Zero Setup)"}
+                  </span>
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+
+                <a
+                  href="#sandbox-demo"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/90 px-5 py-4 text-sm font-bold text-slate-200 transition hover:border-blue-400 hover:bg-slate-900 hover:text-white"
+                >
+                  <Calculator className="h-4 w-4 text-blue-400" />
+                  <span>
+                    {id ? "Simulasi Cepat di Halaman Ini" : "Quick Simulator Below"}
+                  </span>
+                </a>
+              </div>
+
+              {/* Quick Module Jump Links */}
+              <div className="flex flex-wrap items-center gap-2 pt-2 text-xs text-slate-400">
+                <span className="font-mono uppercase text-slate-500">
+                  {id ? "Akses Cepat Juri:" : "Judge Quick Access:"}
+                </span>
+                <Link
+                  href="/pipeline"
+                  className="rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 font-mono text-slate-300 hover:border-blue-500/50 hover:text-blue-300"
+                >
+                  8-Agent LangGraph →
+                </Link>
+                <Link
+                  href="/valuation"
+                  className="rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 font-mono text-slate-300 hover:border-emerald-500/50 hover:text-emerald-300"
+                >
+                  WIPO IDR Studio →
+                </Link>
+                <Link
+                  href="/evaluation"
+                  className="rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 font-mono text-slate-300 hover:border-amber-500/50 hover:text-amber-300"
+                >
+                  QWK & ICC Benchmark →
+                </Link>
+                <Link
+                  href="/reports"
+                  className="rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 font-mono text-slate-300 hover:border-indigo-500/50 hover:text-indigo-300"
+                >
+                  PDF Report Generator →
                 </Link>
               </div>
-              <FourOutputsGrid
-                outputs={activeTech.four_separate_outputs}
-                isDemo={activeTech.is_synthetic_demo}
-                expertStatus={activeTech.expert_review_status}
-              />
-            </section>
-          )}
-
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-slate-900">
-              {id ? "Langkah berikutnya" : "What to do next"}
-            </h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {steps.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <Link
-                    key={s.href}
-                    href={s.href}
-                    className="group rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-blue-300 hover:shadow-md"
-                  >
-                    <Icon className="h-6 w-6 text-blue-600" />
-                    <div className="mt-3 text-base font-semibold text-slate-900">{s.title}</div>
-                    <p className="mt-1 text-sm text-slate-600">{s.desc}</p>
-                  </Link>
-                );
-              })}
             </div>
-          </section>
 
-          <section className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-slate-900">
-                {id ? "Semua teknologi" : "All technologies"}
+            {/* Right Column: Live Case Telemetry Dossier Card */}
+            <div className="lg:col-span-5">
+              <div className="animate-float-slow relative rounded-3xl border border-slate-800 bg-slate-900/95 p-6 shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                  <div>
+                    <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+                      LIVE VERIFIED CASE DOSSIER
+                    </div>
+                    <div className="mt-0.5 text-sm font-bold text-white">
+                      IDP000089421 • ITENAS-PAT-2026-001
+                    </div>
+                  </div>
+                  <span className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
+                    TRL 6 / 9
+                  </span>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5">
+                    <div className="text-xs font-semibold text-slate-400">
+                      {id ? "Invensi Paten Teruji:" : "Evaluated Patent Invention:"}
+                    </div>
+                    <div className="mt-1 text-sm font-bold text-slate-100 leading-snug">
+                      {id
+                        ? "Reaktor Membran Nanokomposit Fotokatalitik TiO2-Zeolit untuk Limbah Cair Industri Tekstil"
+                        : "Photocatalytic TiO2-Zeolite Nanocomposite Membrane Reactor for Industrial Textile Wastewater"}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5">
+                      <div className="font-mono text-[11px] text-slate-400">
+                        OUTPUT 1 • TECH SCORE
+                      </div>
+                      <div className="mt-1 font-mono text-2xl font-black text-blue-400">
+                        78.1%
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-slate-500">
+                        94.2% COD Removal [page:1]
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5">
+                      <div className="font-mono text-[11px] text-slate-400">
+                        OUTPUT 2 • MARKET & TKDN
+                      </div>
+                      <div className="mt-1 font-mono text-2xl font-black text-indigo-400">
+                        77.5%
+                      </div>
+                      <div className="mt-0.5 text-[11px] text-slate-500">
+                        82% TKDN • 2 EPC LOIs [page:3]
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[11px] font-bold uppercase text-emerald-300">
+                        OUTPUT 3 • WIPO BASE DCF VALUATION (IDR)
+                      </span>
+                      <span className="font-mono text-[11px] text-slate-400">
+                        α = 0.75 | r = 15%
+                      </span>
+                    </div>
+                    <div className="mt-1 font-mono text-2xl font-black text-emerald-400 sm:text-3xl">
+                      Rp 3.155.146.516
+                    </div>
+                    <div className="mt-1.5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                      <span>Relief-from-Royalty: Rp 486,25 Jt</span>
+                      <span>Cost: Rp 992,75 Jt</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs">
+                    <span className="flex items-center gap-1.5 font-mono text-slate-300">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                      Output 4: 100% Evidence Coverage (11/11)
+                    </span>
+                    <Link
+                      href="/demo"
+                      className="font-mono font-bold text-emerald-400 hover:underline"
+                    >
+                      {id ? "Buka Kasus →" : "Inspect →"}
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Key Competition Metrics Strip */}
+          <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {heroStats.map((st, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl border border-slate-800/90 bg-slate-900/60 p-5 backdrop-blur"
+              >
+                <div className={`font-mono text-3xl font-black ${st.accent}`}>
+                  {st.value}
+                </div>
+                <div className="mt-1 text-xs font-medium text-slate-300">
+                  {st.sub}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Container */}
+      <div className="mx-auto max-w-7xl space-y-28 px-4 py-20 sm:px-8">
+        {/* Background, Urgency & 4-Output Architecture */}
+        <BackgroundAndArchitectureSection id={id} />
+
+        {/* Live Interactive Sandbox Section right on the Home Page */}
+        <section id="sandbox-demo" className="scroll-mt-24 space-y-6">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-mono font-semibold text-emerald-300">
+                <Sparkles className="h-3.5 w-3.5" />
+                {id
+                  ? "SIMULASI LANGSUNG DI HALAMAN UTAMA"
+                  : "INTERACTIVE SANDBOX ON THIS PAGE"}
+              </div>
+              <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                {id
+                  ? "Uji Mesin Valuasi WIPO & 8-Agen LangGraph Sekarang"
+                  : "Test-Drive the WIPO Valuation Engine & 8-Agent Trace"}
               </h2>
-              <span className="text-sm text-slate-500">
-                {technologies.length} {id ? "teknologi" : "technologies"}
-              </span>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {technologies.map((tech) => {
-                const isSelected = tech.id === (activeTech?.id ?? null);
-                const fo = tech.four_separate_outputs;
-                return (
-                  <button
-                    key={tech.id}
-                    type="button"
-                    onClick={() => setSelectedTechId(tech.id)}
-                    aria-pressed={isSelected}
-                    className={`rounded-2xl border p-5 text-left transition ${
-                      isSelected
-                        ? "border-blue-500 bg-blue-50/60 ring-2 ring-blue-100"
-                        : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="truncate text-base font-semibold text-slate-900">{titleOf(tech)}</div>
-                        <div className="mt-0.5 text-sm text-slate-500">{tech.domain}</div>
-                      </div>
-                      {tech.expert_review_status === "approved" ? (
-                        <Badge variant="success">{t.common.approvedStatus}</Badge>
-                      ) : tech.expert_review_status === "stale" ? (
-                        <Badge variant="danger">{t.common.staleStatus}</Badge>
-                      ) : (
-                        <Badge variant="outline">{t.common.draftWatermark}</Badge>
-                      )}
-                    </div>
-                    <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
-                      <div>
-                        <div className="text-xs text-slate-500">{t.fourOutputs.techAssessment}</div>
-                        <div className="font-semibold text-slate-900">
-                          {((fo.technology_assessment.normalized_score ?? 0) * 100).toFixed(0)}%
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500">{t.fourOutputs.commReadiness}</div>
-                        <div className="font-semibold text-slate-900">
-                          {((fo.commercialization_readiness.normalized_score ?? 0) * 100).toFixed(0)}%
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500">{t.fourOutputs.econValuation}</div>
-                        <div className="truncate font-semibold text-emerald-700">
-                          {fo.economic_valuation.dcf_base_formatted}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-500 sm:text-sm"
+            >
+              <Play className="h-4 w-4 fill-current" />
+              {id
+                ? "Buka Ruang Kerja Demo Lengkap"
+                : "Enter Full Interactive Workspace"}
+            </Link>
+          </div>
+
+          <InteractiveSandboxPreview id={id} />
+        </section>
+
+        {/* Empirical Validation & Ecosystem Impact */}
+        <ImpactAndBenchmarkSection id={id} />
+
+        {/* Bottom Competition Call-to-Action Banner */}
+        <section className="relative overflow-hidden rounded-3xl border border-emerald-500/40 bg-gradient-to-r from-blue-950 via-slate-900 to-emerald-950 p-8 sm:p-12 shadow-2xl">
+          <div className="bg-dark-grid pointer-events-none absolute inset-0 opacity-40" />
+          <div className="relative z-10 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+            <div className="max-w-2xl space-y-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
+                {id ? "SIAP DIUJI OLEH DEWAN JURI & PENGGUNA" : "READY FOR LIVE EVALUATION"}
+              </div>
+              <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+                {id
+                  ? "Siap Mencoba Seluruh Fitur TechVal AI Secara Langsung?"
+                  : "Ready to Experience the Complete TechVal AI Platform?"}
+              </h2>
+              <p className="text-sm leading-relaxed text-slate-300 sm:text-base">
+                {id
+                  ? "Masuk ke Ruang Kerja Demo untuk mengunggah dokumen paten baru, menjalankan orkestrasi 8-agen AI, mengkalibrasi matriks Saaty AHP, hingga mengunduh laporan PDF resmi dwibahasa."
+                  : "Enter the Demo Workspace to upload patent documents, trigger the 8-agent LangGraph pipeline, calibrate Saaty AHP matrices, and export bilingual PDF valuation reports."}
+              </p>
             </div>
-          </section>
-        </>
-      )}
+
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/demo"
+                className="inline-flex items-center gap-3 rounded-2xl bg-emerald-400 px-7 py-4 text-base font-black text-slate-950 shadow-xl shadow-emerald-500/25 transition hover:bg-emerald-300"
+              >
+                <Play className="h-5 w-5 fill-current" />
+                <span>{id ? "Masuk ke Demo Interaktif" : "Launch Full Demo Workspace"}</span>
+              </Link>
+              <Link
+                href="/reports"
+                className="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/90 px-5 py-4 text-sm font-bold text-white transition hover:border-slate-500"
+              >
+                <FileText className="h-4 w-4 text-blue-400" />
+                <span>{id ? "Lihat Contoh Laporan PDF" : "View Sample PDF Reports"}</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-900 bg-slate-950 py-10 text-xs text-slate-500">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-8">
+          <div>
+            <strong className="text-slate-300">TechVal AI</strong> — Institut Teknologi Nasional (ITENAS) Bandung • Scientific Technology Assessment & WIPO IDR Valuation Platform.
+          </div>
+          <div className="flex flex-wrap items-center gap-4 font-mono">
+            <Link href="/demo" className="text-slate-400 hover:text-emerald-400">
+              /demo
+            </Link>
+            <Link href="/methodology" className="text-slate-400 hover:text-emerald-400">
+              /methodology
+            </Link>
+            <Link href="/evaluation" className="text-slate-400 hover:text-emerald-400">
+              /evaluation
+            </Link>
+            <Link href="/reports" className="text-slate-400 hover:text-emerald-400">
+              /reports
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

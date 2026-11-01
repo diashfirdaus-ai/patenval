@@ -8,7 +8,8 @@ export const translations = {
     appName: "TechVal AI",
     appSubtitle: "Assess and value your technology",
     nav: {
-      portfolio: "Home",
+      home: "Company Profile",
+      portfolio: "Demo Workspace",
       submission: "Upload Documents",
       pipeline: "AI Analysis",
       assessment: "Technology Score",
@@ -61,7 +62,8 @@ export const translations = {
     appName: "TechVal AI",
     appSubtitle: "Nilai dan taksir teknologi Anda",
     nav: {
-      portfolio: "Beranda",
+      home: "Profil & Inovasi",
+      portfolio: "Ruang Kerja Demo",
       submission: "Unggah Dokumen",
       pipeline: "Analisis AI",
       assessment: "Skor Teknologi",
@@ -123,7 +125,7 @@ interface AppContextState {
 const AppContext = createContext<AppContextState | null>(null);
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<LanguageCode>("en");
+  const [lang, setLangState] = useState<LanguageCode>("id");
   const [selectedTechId, setSelectedTechIdState] = useState<string | null>(null);
 
   useEffect(() => {
