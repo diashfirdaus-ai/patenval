@@ -12,14 +12,16 @@ export default function AdvisorPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-10">
       <div>
-        <div className="text-sm font-medium text-blue-700">Meta Muse</div>
+        <div className="text-sm font-medium text-blue-700">
+          SINC LAB × ITENAS × Muse (Meta)
+        </div>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
           {id ? "Penasihat AI & 8 Agen Muse" : "AI Advisor & 8 Muse Agents"}
         </h1>
         <p className="mt-2 text-base leading-relaxed text-slate-600">
           {id
-            ? "Pilih salah satu agen untuk menjawab pertanyaan Anda. Setiap agen hanya memakai data kasus, wajib mengutip lokasi bukti, dan tidak mengubah skor menjadi Rupiah. Sitasi dicek ulang terhadap bukti yang tersimpan."
-            : "Pick an agent to answer your question. Each agent uses only the case data, cites evidence locators, and never converts scores into Rupiah. Citations are re-checked against stored evidence."}
+            ? "Penelitian dan sistem hasil kerja sama SINC LAB, ITENAS, dan Muse (Meta). Pilih salah satu agen untuk menjawab pertanyaan Anda: setiap agen hanya memakai data kasus, wajib mengutip lokasi bukti, dan tidak mengubah skor menjadi Rupiah."
+            : "A research and system collaboration between SINC LAB, ITENAS, and Muse (Meta). Pick an agent to answer your question: each agent uses only the case data, cites evidence locators, and never converts scores into Rupiah."}
         </p>
       </div>
 

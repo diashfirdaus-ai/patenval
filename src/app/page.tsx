@@ -70,7 +70,11 @@ export default function CompanyProfileHomePage() {
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <Reveal>
-            <p className="text-sm font-medium text-blue-700">ITENAS Bandung</p>
+            <p className="text-base font-semibold text-blue-700">
+              {id
+                ? "Kolaborasi Riset & Sistem: SINC LAB × ITENAS Bandung × Muse (Meta)"
+                : "Research & System Collaboration: SINC LAB × ITENAS Bandung × Muse (Meta)"}
+            </p>
             <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl">
               {id
                 ? "Dari dokumen paten ke nilai ekonomi yang bisa diperiksa."
@@ -78,8 +82,8 @@ export default function CompanyProfileHomePage() {
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600">
               {id
-                ? "TechVal AI menilai kematangan teknologi, kesiapan komersialisasi, dan nilai ekonominya dalam Rupiah. Setiap skor disertai kutipan dari dokumen asli."
-                : "TechVal AI assesses technology maturity, commercialization readiness, and economic value in Rupiah. Every score comes with a quote from the source document."}
+                ? "Penelitian dan sistem hasil kerja sama SINC LAB, Institut Teknologi Nasional (ITENAS) Bandung, dan Muse (Meta) untuk menilai kematangan teknologi, kesiapan komersialisasi, serta nilai ekonominya dalam Rupiah berbasis kutipan dokumen asli."
+                : "A research and system collaboration between SINC LAB, Institut Teknologi Nasional (ITENAS) Bandung, and Muse (Meta) to assess technology maturity, commercialization readiness, and economic value in Rupiah grounded in source document quotes."}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
@@ -126,12 +130,12 @@ export default function CompanyProfileHomePage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <Reveal>
               <SectionHeading
-                eyebrow="Meta Muse"
+                eyebrow="SINC LAB × ITENAS × Muse (Meta)"
                 title={id ? "8 agen Muse dan tugasnya." : "8 Muse agents and their roles."}
               >
                 {id
-                  ? "Delapan model dari keluarga Meta Muse yang menangani setiap tahap penilaian, mulai dari pemeriksaan berkas paten hingga penyusunan laporan."
-                  : "Eight models from the Meta Muse family handling each assessment stage, from patent file intake to report compilation."}
+                  ? "Sistem hasil kerja sama SINC LAB, ITENAS, dan Muse (Meta) ini menggerakkan delapan model dari keluarga Meta Muse pada setiap tahap penilaian, mulai dari pemeriksaan berkas paten hingga penyusunan laporan."
+                  : "Built through a collaboration between SINC LAB, ITENAS, and Muse (Meta), the system runs eight models from the Meta Muse family across each assessment stage, from patent file intake to report compilation."}
               </SectionHeading>
             </Reveal>
             <Link
@@ -191,7 +195,11 @@ export default function CompanyProfileHomePage() {
 
       <footer className="border-t border-slate-200 py-8 text-sm text-slate-500">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 sm:px-8">
-          <span>TechVal AI · Institut Teknologi Nasional Bandung</span>
+          <span>
+            {id
+              ? "TechVal AI · Kerja sama SINC LAB, ITENAS Bandung, dan Muse (Meta)"
+              : "TechVal AI · A collaboration of SINC LAB, ITENAS Bandung, and Muse (Meta)"}
+          </span>
           <div className="flex gap-5">
             <Link href="/demo" className="hover:text-slate-900">Demo</Link>
             <Link href="/methodology" className="hover:text-slate-900">{id ? "Metodologi" : "Methodology"}</Link>

@@ -29,6 +29,7 @@ import {
   Menu,
   X,
   Sparkles,
+  ArrowLeft,
 } from "lucide-react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -140,11 +141,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-5">
-          <div>
-            <div className="text-xl font-bold tracking-tight text-blue-700">{t.appName}</div>
+        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+          <Link href="/" className="group block" title={lang === "id" ? "Kembali ke halaman awal" : "Back to home page"}>
+            <div className="text-xl font-bold tracking-tight text-blue-700 group-hover:text-blue-800">
+              {t.appName}
+            </div>
             <p className="mt-0.5 text-xs text-slate-500">{t.appSubtitle}</p>
-          </div>
+          </Link>
           <button
             type="button"
             onClick={() => setMenuOpen(false)}
@@ -153,6 +156,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           >
             <X className="h-5 w-5" />
           </button>
+        </div>
+
+        <div className="px-3 pb-4">
+          <Link
+            href="/"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>{lang === "id" ? "Kembali ke Profil" : "Back to Profile"}</span>
+          </Link>
         </div>
 
         <nav className="space-y-5 px-3 pb-6">
@@ -221,6 +234,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">
+                {lang === "id" ? "Kembali ke Profil" : "Back to Profile"}
+              </span>
+            </Link>
+
             <label htmlFor="role-select" className="sr-only">
               {t.common.role}
             </label>

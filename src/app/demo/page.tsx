@@ -150,7 +150,9 @@ export default function DemoWorkspacePage() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="max-w-2xl space-y-1.5">
             <div className="text-sm font-medium text-blue-700">
-              {id ? "Mode demo" : "Demo mode"}
+              {id
+                ? "SINC LAB × ITENAS × Muse (Meta) · Mode demo"
+                : "SINC LAB × ITENAS × Muse (Meta) · Demo mode"}
             </div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
               {id ? "Ruang kerja penilaian & valuasi" : "Assessment & valuation workspace"}
