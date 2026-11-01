@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -147,42 +147,35 @@ export default function DemoWorkspacePage() {
 
   return (
     <div className="space-y-8">
-      {/* Interactive Demo Banner */}
-      <div className="relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 text-white shadow-md">
-        <div className="bg-dark-grid pointer-events-none absolute inset-0 opacity-40" />
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-              <Sparkles className="h-3.5 w-3.5" />
-              {id
-                ? "Mode Sandbox & Demo Interaktif Aktif"
-                : "Interactive Sandbox & Live Demo Active"}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="max-w-2xl space-y-1.5">
+            <div className="text-sm font-medium text-blue-700">
+              {id ? "Mode demo" : "Demo mode"}
             </div>
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              {id
-                ? "Ruang Kerja Penilaian & Valuasi Kekayaan Intelektual"
-                : "IP Assessment & WIPO Valuation Workspace"}
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+              {id ? "Ruang kerja penilaian & valuasi" : "Assessment & valuation workspace"}
             </h1>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm leading-relaxed text-slate-600">
               {id
-                ? "Anda sedang berada di lingkungan demo langsung. Kasus uji Paten Reaktor Membran Fotokatalitik TiO2-Zeolit (IDP000089421) telah dimuat lengkap dengan bukti dokumen, skor TRL 6, dan valuasi DCF WIPO."
-                : "You are inside the live interactive workspace. The Photocatalytic TiO2-Zeolite Membrane Reactor patent case (IDP000089421) is pre-loaded with verified document locators, TRL 6 scoring, and WIPO DCF valuation."}
+                ? "Kasus paten reaktor membran TiO2-zeolit (IDP000089421) sudah dimuat lengkap dengan bukti dokumen, skor TRL 6, dan valuasi DCF."
+                : "The TiO2-zeolite membrane reactor patent case (IDP000089421) is pre-loaded with document evidence, a TRL 6 score, and a DCF valuation."}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/pipeline"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-emerald-400"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700"
             >
-              <Play className="h-4 w-4 fill-current" />
-              {id ? "Uji Pipeline AI" : "Run AI Pipeline"}
+              <Play className="h-4 w-4" />
+              {id ? "Jalankan analisis AI" : "Run AI analysis"}
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-slate-700"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
               <Building2 className="h-4 w-4" />
-              {id ? "Lihat Company Profile" : "Back to Company Profile"}
+              {id ? "Profil perusahaan" : "Company profile"}
             </Link>
           </div>
         </div>

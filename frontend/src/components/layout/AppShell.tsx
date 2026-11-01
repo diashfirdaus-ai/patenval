@@ -29,8 +29,6 @@ import {
   Menu,
   X,
   Building2,
-  Play,
-  ArrowUpRight,
 } from "lucide-react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -121,7 +119,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isLandingPage) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-900">
+      <div className="min-h-screen bg-white text-slate-900">
         {children}
       </div>
     );
