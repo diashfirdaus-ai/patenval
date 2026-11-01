@@ -28,7 +28,7 @@ import {
   UserCheck,
   Menu,
   X,
-  Building2,
+  Sparkles,
 } from "lucide-react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -89,8 +89,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     {
       label: t.nav.groupMain,
       items: [
-        { href: "/", label: t.nav.home, icon: Building2 },
         { href: "/demo", label: t.nav.portfolio, icon: LayoutDashboard },
+        { href: "/advisor", label: t.nav.advisor, icon: Sparkles },
         { href: "/submission", label: t.nav.submission, icon: FileUp },
         { href: "/pipeline", label: t.nav.pipeline, icon: Cpu },
       ],

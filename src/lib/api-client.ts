@@ -140,7 +140,28 @@ export async function apiFetch<T>(
   return (await res.json()) as T;
 }
 
+export interface AdvisorReply {
+  answer: string;
+  model: string;
+  latency_ms: number;
+  total_tokens: number | null;
+  technology_code: string;
+  citations_verified: string[];
+  citations_unverified: string[];
+}
+
 export const apiClient = {
+  askAdvisor: (payload: {
+    question: string;
+    lang: string;
+    technology_id?: string | null;
+    agent_node?: string;
+    history: { role: "user" | "assistant"; content: string }[];
+  }) =>
+    apiFetch<AdvisorReply>("/advisor", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
   getHealth: () => apiFetch<Record<string, any>>("/health"),
   listTechnologies: () => apiFetch<TechnologyItem[]>("/technologies"),
   getTechnology: (id: string) => apiFetch<TechnologyItem>(`/technologies/${id}`),

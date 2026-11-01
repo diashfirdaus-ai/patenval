@@ -21,7 +21,6 @@ import {
   FileText,
   Sparkles,
   CheckCircle2,
-  Building2,
   Play,
   Calculator,
   Microscope,
@@ -171,11 +170,11 @@ export default function DemoWorkspacePage() {
               {id ? "Jalankan analisis AI" : "Run AI analysis"}
             </Link>
             <Link
-              href="/"
+              href="/advisor"
               className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
             >
-              <Building2 className="h-4 w-4" />
-              {id ? "Profil perusahaan" : "Company profile"}
+              <Sparkles className="h-4 w-4" />
+              {id ? "Tanya Penasihat AI" : "Ask the AI Advisor"}
             </Link>
           </div>
         </div>

@@ -770,7 +770,7 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
               }\n\nDocument Sections:\n${docContextText}`,
             },
           ],
-          max_tokens: 900,
+          max_tokens: 4000,
         }),
       });
       stage1LatencyMs = Date.now() - t0;
@@ -822,7 +822,7 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
                 )}`,
               },
             ],
-            max_tokens: 450,
+            max_tokens: 3000,
           }),
         });
         stage2LatencyMs = Date.now() - t1;
@@ -1054,11 +1054,19 @@ Market Demand & Commercialization Readiness: Over 310 off-grid solar microgrids 
         dynamic_updates_applied: dynamicUpdatesApplied,
       },
       agent_executions: baseRun.agent_executions.map((ag: any, idx: number) => {
+        const nodeModelMap: Record<string, string> = {
+          intake_validation: "muse-spark-1.1",
+          evidence_extraction: stage1ModelUsed || "muse-spark-1.3",
+          ip_patent_analysis: "muse-spark-1.2",
+          market_intelligence: "muse-spark-1.3-contributor",
+          technical_trl_assessment: stage2ModelUsed || "muse-wonder-1.0",
+          commercialization_pathway: "muse-spark-1.2-contributor",
+          risk_synthesis: "muse-image-1.0",
+          report_compilation: "muse-voice-transcribe-1.0",
+        };
         const usedModelForNode =
           provider === "meta_ai"
-            ? idx < 4
-              ? stage1ModelUsed
-              : stage2ModelUsed || stage1ModelUsed
+            ? nodeModelMap[ag.agent_name] || stage1ModelUsed
             : actualModelReturned;
         return {
           ...ag,

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAppState } from "@/lib/i18n";
+import { MUSE_AGENTS } from "@/lib/muse-agents";
 import { apiClient } from "@/lib/api-client";
 import type { AnalysisRunItem, DocumentItem } from "@/lib/api-types";
 import { Card, Badge, Button } from "@/components/ui/primitives";
@@ -202,14 +203,12 @@ export default function PipelineMonitorPage() {
                   onChange={(e) => setModelName(e.target.value)}
                   className="mt-1 w-full rounded border border-slate-300 px-2.5 py-1.5 font-mono"
                 >
-                  <option value="muse-spark-1.3">muse-spark-1.3 (Meta Muse Spark 1.3 — Multi-Agent Orchestrator)</option>
-                  <option value="muse-wonder-1.0">muse-wonder-1.0 (Meta Muse Wonder 1.0 — Scientific Reasoning)</option>
-                  <option value="muse-code">muse-code (Meta Muse Code — Technical & Patent Claim Parser)</option>
-                  <option value="muse-image">muse-image (Meta Muse Image — Diagram & Visual Inspector)</option>
-                  <option value="sam-3.1">sam-3.1 (Meta SAM 3.1 — Document & Figure Segmentation)</option>
-                  <option value="muse-spark-1.3-contributor">muse-spark-1.3-contributor</option>
-                  <option value="muse-spark-1.2">muse-spark-1.2</option>
-                  <option value="muse-spark-1.1">muse-spark-1.1</option>
+                  <option value="muse-spark-1.3">muse-spark-1.3 — Penarik Bukti & Kutipan</option>
+                  <option value="muse-wonder-1.0">muse-wonder-1.0 — Penilai TRL Ilmiah</option>
+                  <option value="muse-spark-1.2">muse-spark-1.2 — Pemeriksa Klaim Paten</option>
+                  <option value="muse-spark-1.3-contributor">muse-spark-1.3-contributor — Penelaah Pasar & Adopsi</option>
+                  <option value="muse-spark-1.2-contributor">muse-spark-1.2-contributor — Perancang Jalur Lisensi</option>
+                  <option value="muse-spark-1.1">muse-spark-1.1 — Pemeriksa Berkas Masuk</option>
                 </select>
               ) : (
                 <input
@@ -413,28 +412,37 @@ export default function PipelineMonitorPage() {
               {/* 8 Agent Nodes Trace */}
               <div className="space-y-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  LangGraph 8-Node Checkpoint & Agent Execution Trace
+                  {lang === "id" ? "8 Agen Muse & Tugasnya" : "8 Muse Agents & Their Roles"}
                 </h3>
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                  {selectedRun.agent_executions.map((ag, idx) => (
-                    <div
-                      key={ag.id}
-                      className="rounded border border-slate-200 bg-slate-50 p-2.5 text-xs flex items-start justify-between"
-                    >
-                      <div>
-                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                          <span>
-                            {idx + 1}. {ag.agent_name}
-                          </span>
+                  {selectedRun.agent_executions.map((ag, idx) => {
+                    const spec = MUSE_AGENTS.find((a) => a.node === ag.agent_name);
+                    const modelShown = spec?.model || ag.model_used;
+                    return (
+                      <div
+                        key={ag.id}
+                        className="rounded border border-slate-200 bg-slate-50 p-3 text-xs flex items-start justify-between gap-2"
+                      >
+                        <div>
+                          <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                            <span>
+                              {idx + 1}. {spec ? (lang === "id" ? spec.name_id : spec.name_en) : ag.agent_name}
+                            </span>
+                          </div>
+                          {spec && (
+                            <div className="text-slate-600 mt-1 leading-relaxed">
+                              {lang === "id" ? spec.role_id : spec.role_en}
+                            </div>
+                          )}
+                          <div className="text-[11px] text-slate-500 font-mono mt-1">
+                            {ag.agent_name} • {ag.provider_used}/{modelShown} • {ag.latency_ms} ms
+                          </div>
                         </div>
-                        <div className="text-[11px] text-slate-500 font-mono mt-0.5">
-                          {ag.provider_used}/{ag.model_used} • {ag.latency_ms} ms
-                        </div>
+                        <Badge variant="success">{ag.status}</Badge>
                       </div>
-                      <Badge variant="success">{ag.status}</Badge>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

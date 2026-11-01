@@ -1155,20 +1155,20 @@ function buildInitialState() {
         completed_at: now,
         created_at: now,
         agent_executions: [
-          "intake_validation",
-          "evidence_extraction",
-          "ip_patent_analysis",
-          "market_intelligence",
-          "technical_trl_assessment",
-          "commercialization_pathway",
-          "risk_synthesis",
-          "report_compilation",
-        ].map((name, idx) => ({
+          { name: "intake_validation", model: "muse-spark-1.1" },
+          { name: "evidence_extraction", model: "muse-spark-1.3" },
+          { name: "ip_patent_analysis", model: "muse-spark-1.2" },
+          { name: "market_intelligence", model: "muse-spark-1.3-contributor" },
+          { name: "technical_trl_assessment", model: "muse-wonder-1.0" },
+          { name: "commercialization_pathway", model: "muse-spark-1.2-contributor" },
+          { name: "risk_synthesis", model: "muse-image-1.0" },
+          { name: "report_compilation", model: "muse-voice-transcribe-1.0" },
+        ].map(({ name, model }, idx) => ({
           id: `ag-${idx + 1}`,
           agent_name: name,
           status: "completed",
           provider_used: "meta_ai",
-          model_used: idx < 4 ? "muse-spark-1.3" : "muse-wonder-1.0",
+          model_used: model,
           prompt_hash: "e3b0c44298fc1c149afbf4c8",
           latency_ms: 185 + idx * 23,
           output_summary: {
@@ -1326,16 +1326,28 @@ function upgradeStateToMetaMuse(parsed: Record<string, any>): boolean {
         };
       }
       if (Array.isArray(r.agent_executions)) {
+        const nodeModelMap: Record<string, string> = {
+          intake_validation: "muse-spark-1.1",
+          evidence_extraction: "muse-spark-1.3",
+          ip_patent_analysis: "muse-spark-1.2",
+          market_intelligence: "muse-spark-1.3-contributor",
+          technical_trl_assessment: "muse-wonder-1.0",
+          commercialization_pathway: "muse-spark-1.2-contributor",
+          risk_synthesis: "muse-image-1.0",
+          report_compilation: "muse-voice-transcribe-1.0",
+        };
         r.agent_executions = r.agent_executions.map((ag: any, idx: number) => {
+          const targetModel = nodeModelMap[ag.agent_name] || ag.model_used;
           if (
             ag.provider_used === "fixture" ||
-            ag.model_used === "fixture-deterministic-v1"
+            ag.model_used === "fixture-deterministic-v1" ||
+            (ag.provider_used === "meta_ai" && ag.model_used !== targetModel)
           ) {
             mutated = true;
             return {
               ...ag,
               provider_used: "meta_ai",
-              model_used: idx < 4 ? "muse-spark-1.3" : "muse-wonder-1.0",
+              model_used: targetModel,
               latency_ms:
                 ag.latency_ms && ag.latency_ms < 150 ? 185 + idx * 23 : ag.latency_ms,
               output_summary: {

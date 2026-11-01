@@ -8,7 +8,7 @@ export const translations = {
     appName: "TechVal AI",
     appSubtitle: "Assess and value your technology",
     nav: {
-      home: "Company Profile",
+      advisor: "AI Advisor (Muse Spark)",
       portfolio: "Demo Workspace",
       submission: "Upload Documents",
       pipeline: "AI Analysis",
@@ -62,7 +62,7 @@ export const translations = {
     appName: "TechVal AI",
     appSubtitle: "Nilai dan taksir teknologi Anda",
     nav: {
-      home: "Profil & Inovasi",
+      advisor: "Penasihat AI (Muse Spark)",
       portfolio: "Ruang Kerja Demo",
       submission: "Unggah Dokumen",
       pipeline: "Analisis AI",

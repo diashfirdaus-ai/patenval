@@ -9,6 +9,7 @@ import { CountUp, Reveal } from "@/components/home/Reveal";
 import { InteractiveSandboxPreview } from "@/components/home/InteractiveSandboxPreview";
 import { BackgroundSection, SectionHeading, SolutionSection } from "@/components/home/LandingSections";
 import { ImpactSection, ValidationSection } from "@/components/home/ImpactSections";
+import { AgentRoster } from "@/components/advisor/AgentRoster";
 
 const BASE_NPV = computeDcf(0.15, 0.75, 1).npv;
 
@@ -19,6 +20,7 @@ export default function CompanyProfileHomePage() {
   const nav = [
     { href: "#latar-belakang", label: id ? "Latar belakang" : "Background" },
     { href: "#solusi", label: id ? "Solusi" : "Solution" },
+    { href: "#agen", label: id ? "8 Agen Muse" : "8 Muse Agents" },
     { href: "#coba", label: id ? "Coba" : "Try it" },
     { href: "#dampak", label: id ? "Dampak" : "Impact" },
     { href: "#validasi", label: id ? "Validasi" : "Validation" },
@@ -87,6 +89,9 @@ export default function CompanyProfileHomePage() {
                 {id ? "Coba Demo" : "Try the Demo"}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
+              <Link href="/advisor" className="text-base font-medium text-slate-700 transition-colors hover:text-slate-900">
+                {id ? "Tanya Penasihat AI (Muse Spark)" : "Ask the AI Advisor (Muse Spark)"}
+              </Link>
               <a href="#coba" className="text-base font-medium text-slate-700 transition-colors hover:text-slate-900">
                 {id ? "Simulasi singkat ↓" : "Quick simulation ↓"}
               </a>
@@ -115,6 +120,33 @@ export default function CompanyProfileHomePage() {
 
       <BackgroundSection id={id} />
       <SolutionSection id={id} />
+
+      <section id="agen" className="scroll-mt-20 py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Meta Muse"
+                title={id ? "8 agen dan model yang digunakan." : "8 agents and the models they use."}
+              >
+                {id
+                  ? "Setiap tahap memakai model dari katalog resmi api.meta.ai: enam agen teks pada /v1/chat/completions, satu model gambar pada /v1/images/generations, dan satu model transkripsi suara pada /v1/asr/transcribe."
+                  : "Each stage maps to a model from the official api.meta.ai catalog: six text agents on /v1/chat/completions, one image model on /v1/images/generations, and one speech transcription model on /v1/asr/transcribe."}
+              </SectionHeading>
+            </Reveal>
+            <Link
+              href="/advisor"
+              className="group inline-flex items-center gap-1.5 text-sm font-medium text-blue-700 hover:text-blue-800"
+            >
+              {id ? "Tanya salah satu agen" : "Ask an agent"}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+          <Reveal delay={100} className="mt-12">
+            <AgentRoster id={id} />
+          </Reveal>
+        </div>
+      </section>
 
       <section id="coba" className="scroll-mt-20 py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
