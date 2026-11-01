@@ -411,33 +411,33 @@ export default function PipelineMonitorPage() {
 
               {/* 8 Agent Nodes Trace */}
               <div className="space-y-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                <h3 className="text-base font-bold text-slate-900">
                   {lang === "id" ? "8 Agen Muse & Tugasnya" : "8 Muse Agents & Their Roles"}
                 </h3>
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   {selectedRun.agent_executions.map((ag, idx) => {
                     const spec = MUSE_AGENTS.find((a) => a.node === ag.agent_name);
                     const modelShown = spec?.model || ag.model_used;
                     return (
                       <div
                         key={ag.id}
-                        className="rounded border border-slate-200 bg-slate-50 p-3 text-xs flex items-start justify-between gap-2"
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex items-start justify-between gap-3"
                       >
                         <div>
-                          <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                          <div className="text-base font-semibold text-slate-900 flex flex-wrap items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                             <span>
                               {idx + 1}. {spec ? (lang === "id" ? spec.name_id : spec.name_en) : ag.agent_name}
                             </span>
+                            <span className="rounded bg-blue-50 px-2 py-0.5 font-mono text-xs font-semibold text-blue-700">
+                              {modelShown}
+                            </span>
                           </div>
                           {spec && (
-                            <div className="text-slate-600 mt-1 leading-relaxed">
+                            <div className="text-sm text-slate-600 mt-1.5 leading-relaxed">
                               {lang === "id" ? spec.role_id : spec.role_en}
                             </div>
                           )}
-                          <div className="text-[11px] text-slate-500 font-mono mt-1">
-                            {ag.agent_name} • {ag.provider_used}/{modelShown} • {ag.latency_ms} ms
-                          </div>
                         </div>
                         <Badge variant="success">{ag.status}</Badge>
                       </div>

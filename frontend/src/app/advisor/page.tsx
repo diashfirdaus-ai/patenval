@@ -16,7 +16,7 @@ export default function AdvisorPage() {
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
           {id ? "Penasihat AI & 8 Agen Muse" : "AI Advisor & 8 Muse Agents"}
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-base leading-relaxed text-slate-600">
           {id
             ? "Pilih salah satu agen untuk menjawab pertanyaan Anda. Setiap agen hanya memakai data kasus, wajib mengutip lokasi bukti, dan tidak mengubah skor menjadi Rupiah. Sitasi dicek ulang terhadap bukti yang tersimpan."
             : "Pick an agent to answer your question. Each agent uses only the case data, cites evidence locators, and never converts scores into Rupiah. Citations are re-checked against stored evidence."}
@@ -25,14 +25,14 @@ export default function AdvisorPage() {
 
       <AdvisorChat />
 
-      <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-slate-900">
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
           {id ? "8 Agen Muse dan Tugasnya" : "The 8 Muse Agents and Their Roles"}
         </h2>
-        <p className="text-sm text-slate-600">
+        <p className="text-base text-slate-600">
           {id
-            ? "Enam agen teks berjalan pada endpoint chat (/v1/chat/completions) dan dapat dipilih langsung di atas. Dua agen lainnya adalah model khusus untuk ilustrasi teknis (/v1/images/generations) dan transkripsi suara (/v1/asr/transcribe)."
-            : "Six text agents run on the chat endpoint (/v1/chat/completions) and can be selected above. The other two are dedicated models for technical illustrations (/v1/images/generations) and speech transcription (/v1/asr/transcribe)."}
+            ? "Delapan model Muse yang bekerja pada penilaian teknologi dan komersialisasi paten:"
+            : "The eight Muse models working across technology assessment and patent commercialization:"}
         </p>
         <AgentRoster id={id} />
       </div>

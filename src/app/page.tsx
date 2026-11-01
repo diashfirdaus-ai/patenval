@@ -127,11 +127,11 @@ export default function CompanyProfileHomePage() {
             <Reveal>
               <SectionHeading
                 eyebrow="Meta Muse"
-                title={id ? "8 agen dan model yang digunakan." : "8 agents and the models they use."}
+                title={id ? "8 agen Muse dan tugasnya." : "8 Muse agents and their roles."}
               >
                 {id
-                  ? "Setiap tahap memakai model dari katalog resmi api.meta.ai: enam agen teks pada /v1/chat/completions, satu model gambar pada /v1/images/generations, dan satu model transkripsi suara pada /v1/asr/transcribe."
-                  : "Each stage maps to a model from the official api.meta.ai catalog: six text agents on /v1/chat/completions, one image model on /v1/images/generations, and one speech transcription model on /v1/asr/transcribe."}
+                  ? "Delapan model dari keluarga Meta Muse yang menangani setiap tahap penilaian, mulai dari pemeriksaan berkas paten hingga penyusunan laporan."
+                  : "Eight models from the Meta Muse family handling each assessment stage, from patent file intake to report compilation."}
               </SectionHeading>
             </Reveal>
             <Link

@@ -99,8 +99,8 @@ export const MUSE_AGENTS: MuseAgentSpec[] = [
     chatCompatible: false,
     name_id: "Pembuat Ilustrasi Teknis",
     name_en: "Technical Figure Generator",
-    role_id: "Menghasilkan ilustrasi skema reaktor dan diagram alir proses melalui endpoint gambar.",
-    role_en: "Generates reactor schematics and process flow illustrations via the images endpoint.",
+    role_id: "Menghasilkan ilustrasi skema reaktor dan diagram alir proses.",
+    role_en: "Generates reactor schematics and process flow illustrations.",
   },
   {
     index: 8,
@@ -110,8 +110,8 @@ export const MUSE_AGENTS: MuseAgentSpec[] = [
     chatCompatible: false,
     name_id: "Perekam Catatan Suara Penguji",
     name_en: "Reviewer Voice Transcriber",
-    role_id: "Mengubah rekaman suara penguji atau inventor (WAV) menjadi teks melalui endpoint ASR.",
-    role_en: "Transcribes reviewer or inventor voice notes (WAV) into text via the ASR endpoint.",
+    role_id: "Mengubah rekaman suara penguji atau inventor menjadi catatan teks laporan.",
+    role_en: "Transcribes reviewer or inventor voice notes into text for the report.",
   },
 ];
 
